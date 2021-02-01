@@ -1,5 +1,5 @@
 #!/bin/bash
-export repo="eclipse"
+export repo="eclipse-java-bin"
 pacman -Syu
 pacman -S --noconfirm --needed base-devel git curl wget ccache git tar xz zstd python python-pip
 # use all possible cores for subsequent package builds
