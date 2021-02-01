@@ -1,7 +1,7 @@
 #!/bin/bash
-export repo="ungoogled-chromium"
+export repo="android-sdk-build-tools"
 pacman -Syu
-pacman -S --noconfirm --needed base-devel git curl wget ccache gendesk git tar xz zstd python python-pip libpng12 gst-plugins-base-libs qt5 qt5-webkit
+pacman -S --noconfirm --needed base-devel git curl wget ccache git tar xz zstd python python-pip
 # use all possible cores for subsequent package builds
 sed -i 's,#MAKEFLAGS="-j2",MAKEFLAGS="-j$(nproc)",g' /etc/makepkg.conf
 sed -i 's,!ccache,ccache,g' /etc/makepkg.conf
