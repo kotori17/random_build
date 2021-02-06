@@ -17,14 +17,9 @@ BUILD_START=$(date +"%s")
 su wulan17 -c 'makepkg -s --noconfirm'
 BUILD_END=$(date +"%s")
 export build_time=$((BUILD_END - BUILD_START))
-su wulan17 -c "bash ../upload/up.sh $(pwd)/*.pkg.tar*"
+pacman -U --noconfirm "*.pkg.tar*"
+#su wulan17 -c "bash ../upload/up.sh $(pwd)/*.pkg.tar*"
 cd ../qtwebkit
-BUILD_START=$(date +"%s")
-su wulan17 -c 'makepkg -s --noconfirm'
-BUILD_END=$(date +"%s")
-export build_time=$((BUILD_END - BUILD_START))
-su wulan17 -c "bash ../upload/up.sh $(pwd)/*.pkg.tar*"
-cd ../spflashtool-bin
 BUILD_START=$(date +"%s")
 su wulan17 -c 'makepkg -s --noconfirm'
 BUILD_END=$(date +"%s")
