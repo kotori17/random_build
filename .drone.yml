@@ -4,9 +4,11 @@ name: default
 
 steps:
 - name: kernel
-  image: xaviblanes/manjaro
+  image: amd64/ubuntu
   commands:
   - bash build.sh
   environment:
-    token:
-      from_secret: github_key
+    TELEGRAM_TOKEN:
+      from_secret: telegram_token
+    TELEGRAM_CHAT:
+      from_secret: my_id
