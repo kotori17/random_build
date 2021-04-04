@@ -8,5 +8,5 @@ steps:
   commands:
   - bash build.sh
   environment:
-    token:
-      from_secret: github_key
+    ci_secret:
+      from_secret: ci_secret
