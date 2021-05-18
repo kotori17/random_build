@@ -20,9 +20,9 @@ cd /home/wulan17
 export BUILD_START=$(date +"%s")
 su wulan17 -c 'makepkg -s --noconfirm'
 export BUILD_END=$(date +"%s")
-if [[ ! -z $(ls linux-zen-git-5.11*.pkg.* | cut -d "/" -f 5) ]]; then
-	export filename="$(ls linux-zen-git-5.11*.pkg.*)"
-	export headername="$(ls linux-zen-git-headers-5.11*.pkg.*)"
+if [[ ! -z $(ls linux-zen-git-5.12*.pkg.* | cut -d "/" -f 5) ]]; then
+	export filename="$(ls linux-zen-git-5.12*.pkg.*)"
+	export headername="$(ls linux-zen-git-headers-5.12*.pkg.*)"
 	curl -F secret="$ci_secret" -F document=@"$(pwd)"/"$filename" -F caption="Build success\nFilename: $filename" https://ci.wulan17.my.id/sendDocument
 	curl -F secret="$ci_secret" -F document=@"$(pwd)"/"$headername" -F caption="Build success\nFilename: $headername" https://ci.wulan17.my.id/sendDocument
 	exit 0
