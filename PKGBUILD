@@ -5,7 +5,7 @@ pkgname="linux-zen-git"
 pkgver=5.12.21
 _kernver=4.19.0+783746+g54d1f99f63e9
 pkgdesc="Featureful kernel including various new features, code and optimizations to better suit desktops"
-url="https://github.com/damentz/zen-kernel"
+url="https://github.com/Mayuri-Chan/zen-kernel"
 license=("GPL2")
 makedepends=()
 true && pkgbase="linux-zen-git"
@@ -17,14 +17,8 @@ pkgrel=1
 options=("!strip")
 source=("linux-zen-wulan17.conf"
         "linux-zen-wulan17.preset"
-        'git://github.com/damentz/zen-kernel.git#branch=5.12/master'
-        'Allow-Disable-MSR-Lockdown.patch'
-        'patch-for-spflashtool.patch'
-        'remove-plus-char-from-localversion.patch')
+        'git://github.com/Mayuri-Chan/zen-kernel.git#branch=5.18/master')
 sha256sums=('SKIP'
-            'SKIP'
-            'SKIP'
-            'SKIP'
             'SKIP'
             'SKIP')
 
@@ -107,11 +101,7 @@ build() {
 	fi
 
 	msg "Allowing disable of MSR in lockdown mode to allow undervolting and prevent false positives for spectre-meltdown-checker..."
-	patch -Np1 -i "${srcdir}/Allow-Disable-MSR-Lockdown.patch"
-
-	patch -Np1 -i "${srcdir}/patch-for-spflashtool.patch"
-	patch -Np1 -i "${srcdir}/remove-plus-char-from-localversion.patch"
-
+	
 	msg2 "Updating output directory Makefile..."
 	make -C "${srcdir}/zen-kernel/" O="${srcdir}/build" outputmakefile
 

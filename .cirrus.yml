@@ -1,6 +1,6 @@
 task:
   container:
-    image: wulan17/archlinux:latest
+    image: archlinux:latest
     cpu: 8
     memory: 24G
 
