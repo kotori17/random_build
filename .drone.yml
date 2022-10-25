@@ -4,7 +4,7 @@ name: default
 
 steps:
 - name: kernel
-  image: wulan17/archlinux:base-devel
+  image: ubuntu:latest
   commands:
   - bash build.sh
   environment:

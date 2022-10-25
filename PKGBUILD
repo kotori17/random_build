@@ -2,12 +2,11 @@
 # Original PKGBUILD Contributor: Patrick Bartels <p4ddy.b@gmail.com>
 # Thanks to Bregol
 pkgname="linux-zen-git"
-pkgver=5.12.21
+pkgver=6.0.0+1123784+g0bcf0e0c668d
 _kernver=4.19.0+783746+g54d1f99f63e9
 pkgdesc="Featureful kernel including various new features, code and optimizations to better suit desktops"
-url="https://github.com/Mayuri-Chan/zen-kernel"
+url="https://github.com/damentz/zen-kernel"
 license=("GPL2")
-makedepends=()
 true && pkgbase="linux-zen-git"
 true && pkgname=("linux-zen-git" "linux-zen-git-headers")
 arch=("x86_64")
@@ -16,28 +15,17 @@ provides=("linux-zen")
 pkgrel=1
 options=("!strip")
 source=("linux-zen-wulan17.conf"
-        "linux-zen-wulan17.preset"
-        'git://github.com/Mayuri-Chan/zen-kernel.git#branch=5.18/master')
+        "linux-zen-wulan17.preset")
 sha256sums=('SKIP'
-            'SKIP'
             'SKIP')
 
-_CORES=$(nproc --all)
+_CORES=6
 
 # compress the modules or not
 _compress="y"
 
-# don't compress the package - we're just going to uncompress during install in a moment
-PKGEXT='.pkg.tar.zst'
-
 prepare() {
 	cd "${srcdir}/zen-kernel"
-	
-	# Number of CPU Cores
-	_CORES=$(cat /proc/cpuinfo|grep processor|wc -l)
-	#if [ $_CORES -lt 1 ]; then
-	#	_CORES=2
-	#fi
 	
 	git reset --hard
 }
@@ -49,6 +37,12 @@ pkgver() {
 }
 
 build() {
+        # Number of CPU Cores
+        _CORES=$(cat /proc/cpuinfo|grep processor|wc -l)
+        if [ $_CORES -lt 1 ]; then
+                _CORES=2
+        fi
+
 	cd "${srcdir}/zen-kernel"
 		
 	# don't run depmod on 'make install'. We'll do this ourselves in packaging
@@ -76,37 +70,8 @@ build() {
 		fi
 	fi
 
-	if [ ! -f "${srcdir}/build/.config" ]; then
-		if [ ! -f "${srcdir}/../zen-config" ]; then
-			msg2 "Creating default config..."
-			make -C "${srcdir}/zen-kernel/" O="${srcdir}/build" defconfig > /dev/null
-
-			warning "This package does not ship a kernel config."
-
-			plain   ""
-			warning "Thus it is up to you to create a one that fits your needs."
-			warning "Navigate to '${srcdir}/build'"
-			warning "and either run 'make menuconfig' or if you want to use an existing config,"
-			warning "save it as '.config' and run 'make oldconfig' in order to update it."
-			warning "You could also grab the one used for the mainline zen-kernel package from "
-			warning "https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/linux-zen/trunk/config "
-			warning "Having done that you can run 'makepkg' again."
-			plain   ""
-
-			return 1
-		else
-			msg "Using saved zen-config file in build root."
-			cp "${srcdir}/../zen-config" "${srcdir}/build/.config"
-		fi
-	fi
-
-	msg "Allowing disable of MSR in lockdown mode to allow undervolting and prevent false positives for spectre-meltdown-checker..."
-	
 	msg2 "Updating output directory Makefile..."
 	make -C "${srcdir}/zen-kernel/" O="${srcdir}/build" outputmakefile
-
-	warning "Press ENTER if you want to build the kernel or CTRL+C to abort..."
-	#read
 	
 	cd "${srcdir}/build"
 
@@ -230,8 +195,8 @@ package_linux-zen-git-headers() {
 		install -D -m644 "$file" "${pkgdir}/usr/src/linux-$_kernver/$file"
 	done
 
-	msg2 "Fixing permissions on scripts directory..."
-	chmod og-w -R "${pkgdir}/usr/src/linux-$_kernver/scripts"
+	#msg2 "Fixing permissions on scripts directory..."
+	#chmod og-w -R "${pkgdir}/usr/src/linux-$_kernver/scripts"
 
 	msg2 "Creating symlinks..."
 	mkdir -p "${pkgdir}/usr/lib/modules/$_kernver/"
